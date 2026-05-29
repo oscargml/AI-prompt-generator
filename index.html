@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>OmniPrompt | Free Private AI Prompt Generator & Engineering Tool</title>
+    <meta name="description" content="A free, secure, open-source, and strictly client-side AI prompt generator. Optimize your prompts for ChatGPT, Claude, and Gemini with zero data logging.">
+    <meta name="keywords" content="AI prompt generator, private prompt engineering, secure LLM prompts, open source prompt tool, stateless AI, ChatGPT, Claude, Gemini">
+    <meta name="robots" content="index, follow">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        textarea { resize: vertical; }
+        .token-safe { color: #10b981; } 
+        .token-warn { color: #f59e0b; } 
+        .token-danger { color: #ef4444; } 
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 font-sans p-4 md:p-8">
+
+    <header class="max-w-7xl mx-auto flex justify-between items-center mb-8 pb-4 border-b border-slate-200">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">OmniPrompt <span class="text-xs bg-blue-100 text-blue-800 py-1 px-2 rounded-full align-middle">v3</span></h1>
+        </div>
+        <nav>
+            <a href="#blog" class="text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors">Read SEO Guides</a>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+        
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Prompt Builder</h2>
+                    <p class="text-sm text-slate-500 mt-1">Stateless, private, client-side engineering.</p>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-100 p-2 rounded-lg border border-slate-200">
+                    <input type="checkbox" id="privacyToggle" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" checked>
+                    <label for="privacyToggle" class="text-sm font-semibold text-slate-700 cursor-pointer" title="Automatically masks emails, IPs, and phone numbers">Auto-Mask PII</label>
+                </div>
+            </div>
+
+            <form id="promptForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Role / Persona</label>
+                    <input type="text" id="role" oninput="detectVariables(); updateTokens();" placeholder="e.g., You are an expert Data Scientist..." class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1 flex justify-between">
+                        <span>Context</span>
+                        <span class="text-xs font-normal text-slate-400">Use {{variable}} for dynamic inputs</span>
+                    </label>
+                    <textarea id="context" rows="3" oninput="detectVariables(); updateTokens();" placeholder="e.g., We are analyzing a dataset for {{client_name}}..." class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Task <span class="text-red-500">*</span></label>
+                    <textarea id="task" rows="3" oninput="detectVariables(); updateTokens();" placeholder="What exactly do you want the AI to do?" required class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Constraints & Rules</label>
+                    <textarea id="constraints" rows="2" oninput="detectVariables(); updateTokens();" placeholder="e.g., Do not use third-party libraries. Think step-by-step." class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">JSON Schema (Output Structure)</label>
+                    <textarea id="schema" rows="3" oninput="updateTokens();" placeholder='e.g., { "type": "object", "properties": { "summary": { "type": "string" } } }' class="w-full p-2 font-mono text-xs border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                </div>
+
+                <div id="variablesContainer" class="hidden bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <h3 class="text-sm font-bold text-blue-900 mb-3">Dynamic Variables</h3>
+                    <div id="variablesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                </div>
+
+                <div class="flex gap-4 pt-4 border-t border-slate-100">
+                    <button type="button" onclick="generatePrompt()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors w-full shadow-md">Compile Prompt</button>
+                    <button type="button" onclick="clearFields()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-4 rounded transition-colors w-full">Clear All</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-800 flex flex-col">
+            <div class="flex justify-between items-end mb-4 border-b border-slate-700 pb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white mb-1">Compiled Output</h2>
+                    <div class="text-xs font-mono text-slate-400">
+                        Est. Tokens: <span id="tokenCount" class="font-bold token-safe">0</span>
+                    </div>
+                </div>
+                <button onclick="copyToClipboard(event)" class="text-sm bg-slate-700 hover:bg-slate-600 text-white py-2 px-4 rounded transition-colors font-semibold">Copy to Clipboard</button>
+            </div>
+            
+            <textarea id="output" readonly class="w-full h-full min-h-[500px] p-4 bg-slate-950 text-green-400 font-mono text-sm border border-slate-700 rounded focus:outline-none placeholder-slate-700 resize-none" placeholder="Your compiled, masked, and tagged prompt will appear here..."></textarea>
+        </div>
+    </main>
+
+    <section id="blog" class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-slate-200 mb-16">
+        <h2 class="text-3xl font-extrabold text-slate-900 mb-8 border-b border-slate-200 pb-4">Prompt Engineering Guides & Resources</h2>
+        
+        <article class="mb-10">
+            <h3 class="text-2xl font-bold text-blue-700 mb-3">Why You Need a Stateless, Private Prompt Generator</h3>
+            <p class="text-sm text-slate-500 mb-4">Published for AI Developers & Enterprise Teams</p>
+            <div class="prose prose-slate max-w-none text-slate-700 space-y-4">
+                <p>When engineering prompts for cutting-edge models like GPT-4o, Claude 3.5 Sonnet, or Gemini 1.5 Pro, developers often paste sensitive company context into third-party web wrappers. This creates a massive data privacy risk.</p>
+                <p>A <strong>stateless, client-side prompt generator</strong> solves this by executing entirely within your local browser. Because there is no backend database and no API calling home, your proprietary codebase, customer PII, and trade secrets remain entirely on your machine.</p>
+                <p><strong>Key benefits of local prompt engineering tools:</strong></p>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>Zero telemetry or tracking scripts.</li>
+                    <li>Automatic PII masking (redacting emails and IPs) before the prompt hits the clipboard.</li>
+                    <li>Universal compatibility by relying on standard XML tag structuring.</li>
+                </ul>
+            </div>
+        </article>
+
+        <article>
+            <h3 class="text-2xl font-bold text-blue-700 mb-3">The Power of XML Tags in Advanced AI Prompts</h3>
+            <p class="text-sm text-slate-500 mb-4">Mastering Anthropic and Google Frontier Models</p>
+            <div class="prose prose-slate max-w-none text-slate-700 space-y-4">
+                <p>If you review the documentation for Anthropic's Claude or Google's Gemini, you will notice a recurring theme: they heavily favor structured prompts using XML tags. Unlike early iterations of ChatGPT that relied on vague natural language formatting, modern frontier models parse structured data exponentially better.</p>
+                <p>By compartmentalizing your prompt into distinct tags—such as <code>&lt;role&gt;</code>, <code>&lt;context&gt;</code>, and <code>&lt;task&gt;</code>—you drastically reduce the chance of AI hallucination and prompt injection. It acts as a strict boundary, telling the LLM exactly where the background information ends and the strict instructions begin.</p>
+                <p>When forcing an AI to output JSON data, wrapping your JSON Schema in a <code>&lt;json_schema&gt;</code> tag is currently the most deterministic way to guarantee the model will not output conversational filler text, ensuring it integrates flawlessly with your application pipelines.</p>
+            </div>
+        </article>
+    </section>
+
+    <footer class="text-center text-slate-500 text-sm pb-8">
+        <p>&copy; 2026 OmniPrompt Open Source. Built for secure, local AI engineering.</p>
+    </footer>
+
+    <script>
+        let extractedVariables = new Set();
+
+        function detectVariables() {
+            const textFields = [
+                document.getElementById('role').value,
+                document.getElementById('context').value,
+                document.getElementById('task').value,
+                document.getElementById('constraints').value
+            ].join(' ');
+
+            const regex = /\{\{([^}]+)\}\}/g;
+            let match;
+            const currentVars = new Set();
+
+            while ((match = regex.exec(textFields)) !== null) {
+                currentVars.add(match[1].trim());
+            }
+
+            const container = document.getElementById('variablesContainer');
+            const grid = document.getElementById('variablesGrid');
+
+            if (currentVars.size === 0) {
+                container.classList.add('hidden');
+                extractedVariables.clear();
+                grid.innerHTML = '';
+                return;
+            }
+
+            container.classList.remove('hidden');
+
+            currentVars.forEach(v => {
+                if (!extractedVariables.has(v)) {
+                    extractedVariables.add(v);
+                    const div = document.createElement('div');
+                    div.id = `var-container-${v}`;
+                    div.innerHTML = `
+                        <label class="block text-xs font-semibold mb-1 text-blue-800">${v}</label>
+                        <input type="text" id="var-${v}" placeholder="Value for ${v}" class="w-full p-2 border border-blue-200 rounded text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    `;
+                    grid.appendChild(div);
+                }
+            });
+
+            extractedVariables.forEach(v => {
+                if (!currentVars.has(v)) {
+                    extractedVariables.delete(v);
+                    const el = document.getElementById(`var-container-${v}`);
+                    if (el) el.remove();
+                }
+            });
+        }
+
+        function maskPII(text) {
+            if (!document.getElementById('privacyToggle').checked) return text;
+            let maskedText = text;
+            maskedText = maskedText.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[REDACTED_EMAIL]');
+            maskedText = maskedText.replace(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g, '[REDACTED_IP]');
+            maskedText = maskedText.replace(/\b\+?(\d{1,3})?[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g, '[REDACTED_PHONE]');
+            return maskedText;
+        }
+
+        function updateTokens() {
+            const allText = [
+                document.getElementById('role').value,
+                document.getElementById('context').value,
+                document.getElementById('task').value,
+                document.getElementById('constraints').value,
+                document.getElementById('schema').value
+            ].join(' ');
+
+            const tokenEstimate = Math.ceil(allText.length / 4);
+            const tokenEl = document.getElementById('tokenCount');
+            tokenEl.innerText = tokenEstimate.toLocaleString();
+            
+            tokenEl.className = 'font-bold ';
+            if (tokenEstimate < 4000) tokenEl.className += 'token-safe';
+            else if (tokenEstimate < 32000) tokenEl.className += 'token-warn';
+            else tokenEl.className += 'token-danger';
+        }
+
+        function generatePrompt() {
+            let role = document.getElementById('role').value.trim();
+            let context = document.getElementById('context').value.trim();
+            let task = document.getElementById('task').value.trim();
+            let constraints = document.getElementById('constraints').value.trim();
+            const schema = document.getElementById('schema').value.trim();
+
+            if (!task) {
+                alert("Please provide at least a Task.");
+                return;
+            }
+
+            extractedVariables.forEach(v => {
+                const val = document.getElementById(`var-${v}`).value || `[MISSING: ${v}]`;
+                const regex = new RegExp(`\\{\\{${v}\\}\\}`, 'g');
+                role = role.replace(regex, val);
+                context = context.replace(regex, val);
+                task = task.replace(regex, val);
+                constraints = constraints.replace(regex, val);
+            });
+
+            role = maskPII(role);
+            context = maskPII(context);
+            task = maskPII(task);
+            constraints = maskPII(constraints);
+
+            let promptParts = [];
+
+            if (role) promptParts.push(`<role>\n${role}\n</role>`);
+            if (context) promptParts.push(`<context>\n${context}\n</context>`);
+            promptParts.push(`<task>\n${task}\n</task>`);
+            if (constraints) promptParts.push(`<constraints>\n${constraints}\n</constraints>`);
+            if (schema) promptParts.push(`<json_schema>\n${schema}\n</json_schema>\n<instruction>\nYou must format your entire response exactly according to the provided json_schema. Do not include markdown formatting like \`\`\`json, just return the raw JSON object.\n</instruction>`);
+
+            const finalPrompt = promptParts.join('\n\n');
+            document.getElementById('output').value = finalPrompt;
+            
+            const tokenEstimate = Math.ceil(finalPrompt.length / 4);
+            document.getElementById('tokenCount').innerText = tokenEstimate.toLocaleString();
+        }
+
+        function clearFields() {
+            document.getElementById('promptForm').reset();
+            document.getElementById('output').value = '';
+            document.getElementById('tokenCount').innerText = '0';
+            document.getElementById('variablesContainer').classList.add('hidden');
+            document.getElementById('variablesGrid').innerHTML = '';
+            extractedVariables.clear();
+        }
+
+        function copyToClipboard(event) {
+            const output = document.getElementById('output');
+            if (!output.value) return;
+            
+            output.select();
+            document.execCommand('copy');
+            
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = 'Copied!';
+            btn.classList.add('bg-green-600', 'text-white');
+            btn.classList.remove('bg-slate-700');
+            
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.classList.remove('bg-green-600', 'text-white');
+                btn.classList.add('bg-slate-700');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
