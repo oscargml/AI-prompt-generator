@@ -2,46 +2,159 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MMPSM1H3E4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MMPSM1H3E4"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-MMPSM1H3E4');
+    </script>
 
-  gtag('config', 'G-MMPSM1H3E4');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>OmniPrompt | Free Private AI Prompt Generator & Engineering Tool</title>
-    <meta name="description" content="A free, secure, open-source, and strictly client-side AI prompt generator. Optimize your prompts for ChatGPT, Claude, and Gemini with zero data logging.">
-    <meta name="keywords" content="AI prompt generator, private prompt engineering, secure LLM prompts, open source prompt tool, stateless AI, ChatGPT, Claude, Gemini">
+    <meta name="description" content="A free, secure, open-source, strictly client-side AI prompt generator. Build structured XML prompts for ChatGPT, Claude, and Gemini with auto PII-masking, token estimates, a prompt quality score, and zero data logging.">
+    <meta name="keywords" content="AI prompt generator, private prompt engineering, secure LLM prompts, open source prompt tool, stateless AI, prompt templates, ChatGPT, Claude, Gemini">
     <meta name="robots" content="index, follow">
-    
+    <meta name="author" content="OmniPrompt Open Source">
+    <link rel="canonical" href="https://oscargml.github.io/AI-prompt-generator/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://oscargml.github.io/AI-prompt-generator/">
+    <meta property="og:title" content="OmniPrompt — Free Private AI Prompt Generator">
+    <meta property="og:description" content="Build structured, PII-masked prompts for ChatGPT, Claude & Gemini. 100% client-side, zero logging, free forever.">
+    <meta property="og:image" content="https://oscargml.github.io/AI-prompt-generator/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OmniPrompt — Free Private AI Prompt Generator">
+    <meta name="twitter:description" content="Build structured, PII-masked prompts for ChatGPT, Claude & Gemini. 100% client-side, zero logging, free forever.">
+    <meta name="twitter:image" content="https://oscargml.github.io/AI-prompt-generator/og-image.png">
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <!-- ===================================================================
+         GOOGLE ADSENSE — paste your real publisher ID into ADSENSE_CLIENT
+         below (looks like ca-pub-1234567890123456). Until then ads stay
+         dormant. Enable Auto Ads at AdSense → Ads → By site once approved.
+    ==================================================================== -->
+    <script>window.ADSENSE_CLIENT = "ca-pub-XXXXXXXXXXXXXXXX";</script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         textarea { resize: vertical; }
-        .token-safe { color: #10b981; } 
-        .token-warn { color: #f59e0b; } 
-        .token-danger { color: #ef4444; } 
+        .token-safe { color: #10b981; }
+        .token-warn { color: #f59e0b; }
+        .token-danger { color: #ef4444; }
         html { scroll-behavior: smooth; }
+        /* Ad placeholder so unfilled slots never look broken in dev. Remove text once ads are live. */
+        .ad-slot { min-height: 90px; display: flex; align-items: center; justify-content: center; }
+        .ad-slot::before { content: "Advertisement"; color: #cbd5e1; font-size: 11px; letter-spacing: .15em; text-transform: uppercase; }
+        .ad-slot ins[data-adsbygoogle-status] + nothing {}
+        @keyframes pop { 0% { transform: scale(.8); opacity: 0; } 60% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
+        .pop { animation: pop .35s ease-out; }
+        @keyframes toastIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "OmniPrompt",
+      "url": "https://oscargml.github.io/AI-prompt-generator/",
+      "description": "A free, open-source, strictly client-side AI prompt generator that builds structured XML prompts for ChatGPT, Claude, and Gemini with automatic PII masking and zero data logging.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (web browser)",
+      "browserRequirements": "Requires JavaScript",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [
+        "Structured XML prompt compilation",
+        "Automatic PII masking (emails, IPs, phone numbers)",
+        "Dynamic {{variable}} templating",
+        "Token estimation",
+        "Prompt quality score",
+        "Shareable deep links",
+        "100% client-side, no data logging"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is OmniPrompt really private?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. OmniPrompt runs entirely in your browser. There is no backend, no database, and no API calling home. Your context, code, and PII never leave your machine, and optional auto-masking redacts emails, IPs, and phone numbers before the prompt reaches your clipboard." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which AI models does it work with?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Any text model. OmniPrompt outputs clean XML-tagged structure (role, context, task, constraints, json_schema) that ChatGPT, Claude, Gemini, Llama, and other frontier models parse reliably." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Completely free and open source. No sign-up, no account, no paywall. If it saves you time you can optionally support development with a coffee." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the prompt quality score work?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The score rewards a complete prompt: a defined role, supporting context, a clear task, explicit constraints, and an output schema. Higher scores generally produce more deterministic, less hallucination-prone responses from large language models." }
+        }
+      ]
+    }
+    </script>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 font-sans p-4 md:p-8">
 
     <header class="max-w-7xl mx-auto flex justify-between items-center mb-8 pb-4 border-b border-slate-200">
-        <div>
+        <div class="flex items-center gap-3">
             <h1 class="text-3xl font-bold text-slate-900 tracking-tight">OmniPrompt <span class="text-xs bg-blue-100 text-blue-800 py-1 px-2 rounded-full align-middle">v3</span></h1>
+            <span id="streakPill" class="hidden items-center gap-1 text-xs font-bold bg-orange-100 text-orange-700 py-1 px-2.5 rounded-full" title="Daily build streak — compile a prompt each day to keep it alive">🔥 <span id="streakCount">0</span>-day streak</span>
         </div>
-        <nav>
-            <a href="#blog" class="text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors">Read SEO Guides</a>
+        <nav class="flex items-center gap-4">
+            <a href="#blog" class="hidden sm:inline text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors">Guides</a>
+            <a href="#faq" class="hidden sm:inline text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors">FAQ</a>
+            <a href="https://buymeacoffee.com/velmorpub" target="_blank" rel="noopener" class="text-sm font-semibold bg-amber-400 hover:bg-amber-500 text-slate-900 py-1.5 px-3 rounded-lg transition-colors">☕ Support</a>
         </nav>
     </header>
 
-    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-        
+    <!-- HERO -->
+    <section class="max-w-7xl mx-auto text-center mb-10">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">Engineer better AI prompts in seconds.</h2>
+        <p class="max-w-2xl mx-auto text-lg text-slate-600 mb-6">Turn messy instructions into clean, structured, PII-safe prompts that ChatGPT, Claude &amp; Gemini actually understand — 100% in your browser.</p>
+        <div class="flex flex-wrap justify-center gap-3 mb-6">
+            <a href="#builder" onclick="loadRandomTemplate(); return true;" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors">✨ Try a template now</a>
+            <a href="#builder" class="bg-white hover:bg-slate-100 text-slate-800 font-bold py-3 px-6 rounded-lg border border-slate-300 transition-colors">Start from scratch</a>
+        </div>
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-500 font-medium">
+            <span>✅ 100% free</span>
+            <span>🔒 No sign-up · zero logging</span>
+            <span>⚡ Runs in your browser</span>
+            <span>📦 Open source</span>
+        </div>
+    </section>
+
+    <!-- Top ad (Auto Ads will also fill the page once enabled) -->
+    <div class="max-w-7xl mx-auto mb-10">
+        <div class="ad-slot bg-white rounded-xl border border-slate-200">
+            <ins class="adsbygoogle" style="display:block;width:100%" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+
+    <main id="builder" class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16 scroll-mt-8">
+
         <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between items-center mb-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">Prompt Builder</h2>
                     <p class="text-sm text-slate-500 mt-1">Stateless, private, client-side engineering.</p>
@@ -52,10 +165,16 @@
                 </div>
             </div>
 
+            <!-- Template quick-start chips -->
+            <div class="mb-6">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Quick start templates</p>
+                <div id="templateChips" class="flex flex-wrap gap-2"></div>
+            </div>
+
             <form id="promptForm" class="space-y-4">
                 <div>
                     <label class="block text-sm font-semibold mb-1">Role / Persona</label>
-                    <input type="text" id="role" oninput="detectVariables(); updateTokens();" placeholder="e.g., You are an expert Data Scientist..." class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                    <input type="text" id="role" oninput="onInput()" placeholder="e.g., You are an expert Data Scientist..." class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm">
                 </div>
 
                 <div>
@@ -63,22 +182,22 @@
                         <span>Context</span>
                         <span class="text-xs font-normal text-slate-400">Use {{variable}} for dynamic inputs</span>
                     </label>
-                    <textarea id="context" rows="3" oninput="detectVariables(); updateTokens();" placeholder="e.g., We are analyzing a dataset for {{client_name}}..." class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"></textarea>
+                    <textarea id="context" rows="3" oninput="onInput()" placeholder="e.g., We are analyzing a dataset for {{client_name}}..." class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"></textarea>
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold mb-1">Task <span class="text-red-500">*</span></label>
-                    <textarea id="task" rows="3" oninput="detectVariables(); updateTokens();" placeholder="What exactly do you want the AI to do?" required class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"></textarea>
+                    <textarea id="task" rows="3" oninput="onInput()" placeholder="What exactly do you want the AI to do?" required class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"></textarea>
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold mb-1">Constraints & Rules</label>
-                    <textarea id="constraints" rows="2" oninput="detectVariables(); updateTokens();" placeholder="e.g., Do not use third-party libraries. Think step-by-step." class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"></textarea>
+                    <textarea id="constraints" rows="2" oninput="onInput()" placeholder="e.g., Do not use third-party libraries. Think step-by-step." class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"></textarea>
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold mb-1">JSON Schema (Output Structure)</label>
-                    <textarea id="schema" rows="3" oninput="updateTokens();" placeholder='e.g., { "type": "object", "properties": { "summary": { "type": "string" } } }' class="w-full p-2 font-mono text-xs border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                    <textarea id="schema" rows="3" oninput="onInput()" placeholder='e.g., { "type": "object", "properties": { "summary": { "type": "string" } } }' class="w-full p-2 font-mono text-xs border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
                 </div>
 
                 <div id="variablesContainer" class="hidden bg-blue-50 p-4 rounded-lg border border-blue-100">
@@ -101,16 +220,37 @@
                         Est. Tokens: <span id="tokenCount" class="font-bold token-safe">0</span>
                     </div>
                 </div>
-                <button onclick="copyToClipboard(event)" class="text-sm bg-slate-700 hover:bg-slate-600 text-white py-2 px-4 rounded transition-colors font-semibold">Copy to Clipboard</button>
+                <div class="flex gap-2">
+                    <button onclick="sharePrompt(event)" class="text-sm bg-slate-700 hover:bg-slate-600 text-white py-2 px-4 rounded transition-colors font-semibold" title="Copy a shareable link to this exact prompt">🔗 Share</button>
+                    <button onclick="copyToClipboard(event)" class="text-sm bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded transition-colors font-semibold">Copy</button>
+                </div>
             </div>
-            
-            <textarea id="output" readonly class="w-full h-full min-h-[500px] p-4 bg-slate-950 text-green-400 font-mono text-sm border border-slate-700 rounded focus:outline-none placeholder-slate-700 resize-none" placeholder="Your compiled, masked, and tagged prompt will appear here..."></textarea>
+
+            <!-- Quality score meter -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center text-xs mb-1">
+                    <span class="font-semibold text-slate-300">Prompt quality</span>
+                    <span id="scoreLabel" class="font-bold text-slate-400">— Add a task to begin</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                    <div id="scoreBar" class="h-full w-0 bg-slate-600 transition-all duration-500 rounded-full"></div>
+                </div>
+            </div>
+
+            <textarea id="output" readonly class="w-full h-full min-h-[440px] p-4 bg-slate-950 text-green-400 font-mono text-sm border border-slate-700 rounded focus:outline-none placeholder-slate-700 resize-none" placeholder="Your compiled, masked, and tagged prompt will appear here..."></textarea>
         </div>
     </main>
 
-    <section id="blog" class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-slate-200 mb-16">
+    <!-- In-content ad -->
+    <div class="max-w-4xl mx-auto mb-16">
+        <div class="ad-slot bg-white rounded-xl border border-slate-200">
+            <ins class="adsbygoogle" style="display:block;width:100%" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+
+    <section id="blog" class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-slate-200 mb-16 scroll-mt-8">
         <h2 class="text-3xl font-extrabold text-slate-900 mb-8 border-b border-slate-200 pb-4">Prompt Engineering Guides & Resources</h2>
-        
+
         <article class="mb-10">
             <h3 class="text-2xl font-bold text-blue-700 mb-3">Why You Need a Stateless, Private Prompt Generator</h3>
             <p class="text-sm text-slate-500 mb-4">Published for AI Developers & Enterprise Teams</p>
@@ -137,12 +277,119 @@
         </article>
     </section>
 
-    <footer class="text-center text-slate-500 text-sm pb-8">
+    <!-- FAQ (answers mirror the FAQPage JSON-LD above) -->
+    <section id="faq" class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-slate-200 mb-16 scroll-mt-8">
+        <h2 class="text-3xl font-extrabold text-slate-900 mb-8 border-b border-slate-200 pb-4">Frequently Asked Questions</h2>
+        <div class="space-y-6">
+            <div>
+                <h3 class="text-lg font-bold text-slate-900">Is OmniPrompt really private?</h3>
+                <p class="text-slate-700 mt-1">Yes. OmniPrompt runs entirely in your browser. There is no backend, no database, and no API calling home. Your context, code, and PII never leave your machine, and optional auto-masking redacts emails, IPs, and phone numbers before the prompt reaches your clipboard.</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900">Which AI models does it work with?</h3>
+                <p class="text-slate-700 mt-1">Any text model. OmniPrompt outputs clean XML-tagged structure (role, context, task, constraints, json_schema) that ChatGPT, Claude, Gemini, Llama, and other frontier models parse reliably.</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900">Is it free?</h3>
+                <p class="text-slate-700 mt-1">Completely free and open source. No sign-up, no account, no paywall. If it saves you time you can optionally support development with a coffee.</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900">How does the prompt quality score work?</h3>
+                <p class="text-slate-700 mt-1">The score rewards a complete prompt: a defined role, supporting context, a clear task, explicit constraints, and an output schema. Higher scores generally produce more deterministic, less hallucination-prone responses from large language models.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support / tip jar -->
+    <section class="max-w-4xl mx-auto text-center bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-xl border border-amber-200 mb-16">
+        <h2 class="text-2xl font-extrabold text-slate-900 mb-2">OmniPrompt is free — and ad-light on purpose.</h2>
+        <p class="text-slate-600 max-w-xl mx-auto mb-5">No paywall, no account, no selling your data. If it saved you time, a coffee keeps it running and ad-free-r.</p>
+        <a href="https://buymeacoffee.com/velmorpub" target="_blank" rel="noopener" class="inline-block bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-3 px-6 rounded-lg shadow-md transition-colors">☕ Buy me a coffee</a>
+    </section>
+
+    <footer class="text-center text-slate-500 text-sm pb-24">
         <p>&copy; 2026 OmniPrompt Open Source. Built for secure, local AI engineering.</p>
     </footer>
 
+    <!-- Toast container -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-slate-900 text-white text-sm font-semibold py-2.5 px-5 rounded-full shadow-lg" style="animation: toastIn .25s ease-out;"></div>
+
     <script>
+        /* ----------------------------- Templates ----------------------------- */
+        const TEMPLATES = {
+            "🧑‍💻 Code Reviewer": {
+                role: "You are a senior software engineer performing a rigorous code review.",
+                context: "The following pull request modifies a {{language}} module in a production codebase.",
+                task: "Review the code for correctness bugs, security vulnerabilities, and performance issues. List each finding with severity and a concrete fix.",
+                constraints: "Be specific and cite line patterns. Do not rewrite the whole file. Prioritize real issues over style nits.",
+                schema: ""
+            },
+            "✍️ Blog Writer": {
+                role: "You are an expert content writer with a clear, engaging voice.",
+                context: "Audience: {{audience}}. Tone: friendly but authoritative.",
+                task: "Write a 600-word blog post about {{topic}} with an H1, three H2 sections, and a short conclusion with a call to action.",
+                constraints: "Avoid clichés and filler. Use short paragraphs. Include one practical example.",
+                schema: ""
+            },
+            "📊 Data Analyst": {
+                role: "You are a data analyst fluent in SQL and statistics.",
+                context: "We have a table named {{table_name}} with columns described by the user.",
+                task: "Suggest the three most insightful analyses to run and write the SQL for each.",
+                constraints: "Use standard ANSI SQL. Explain the business value of each query in one sentence.",
+                schema: ""
+            },
+            "🔧 JSON Extractor": {
+                role: "You are a precise information-extraction engine.",
+                context: "The user will paste unstructured text describing a product.",
+                task: "Extract the product name, price, and key features from the text.",
+                constraints: "Return only valid JSON. Use null for missing fields.",
+                schema: '{ "type": "object", "properties": { "name": { "type": "string" }, "price": { "type": "number" }, "features": { "type": "array", "items": { "type": "string" } } }, "required": ["name"] }'
+            },
+            "🎓 Explain Like I'm 5": {
+                role: "You are a patient teacher who explains complex topics simply.",
+                context: "The learner has no technical background.",
+                task: "Explain {{concept}} using a simple, vivid analogy a 5-year-old would understand.",
+                constraints: "Avoid jargon. Keep it under 150 words. End with a one-sentence summary.",
+                schema: ""
+            }
+        };
+
+        const FIELD_IDS = ["role", "context", "task", "constraints", "schema"];
+
+        function renderTemplates() {
+            const wrap = document.getElementById('templateChips');
+            wrap.innerHTML = '';
+            Object.keys(TEMPLATES).forEach(name => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'text-xs font-semibold bg-slate-100 hover:bg-blue-100 hover:text-blue-700 text-slate-600 py-1.5 px-3 rounded-full border border-slate-200 transition-colors';
+                btn.textContent = name;
+                btn.onclick = () => applyTemplate(name);
+                wrap.appendChild(btn);
+            });
+        }
+
+        function applyTemplate(name) {
+            const t = TEMPLATES[name];
+            FIELD_IDS.forEach(id => { document.getElementById(id).value = t[id] || ''; });
+            onInput();
+            toast(`Loaded: ${name}`);
+            gtag('event', 'template_loaded', { template: name });
+        }
+
+        function loadRandomTemplate() {
+            const names = Object.keys(TEMPLATES);
+            applyTemplate(names[Math.floor(Math.random() * names.length)]);
+        }
+
+        /* --------------------------- Core builder --------------------------- */
         let extractedVariables = new Set();
+
+        function onInput() {
+            detectVariables();
+            updateTokens();
+            updateScore();
+        }
 
         function detectVariables() {
             const textFields = [
@@ -204,38 +451,52 @@
         }
 
         function updateTokens() {
-            const allText = [
-                document.getElementById('role').value,
-                document.getElementById('context').value,
-                document.getElementById('task').value,
-                document.getElementById('constraints').value,
-                document.getElementById('schema').value
-            ].join(' ');
-
+            const allText = FIELD_IDS.map(id => document.getElementById(id).value).join(' ');
             const tokenEstimate = Math.ceil(allText.length / 4);
             const tokenEl = document.getElementById('tokenCount');
             tokenEl.innerText = tokenEstimate.toLocaleString();
-            
+
             tokenEl.className = 'font-bold ';
             if (tokenEstimate < 4000) tokenEl.className += 'token-safe';
             else if (tokenEstimate < 32000) tokenEl.className += 'token-warn';
             else tokenEl.className += 'token-danger';
         }
 
-        function generatePrompt() {
+        function updateScore() {
+            const v = id => document.getElementById(id).value.trim();
+            let score = 0;
+            if (v('role')) score += 20;
+            if (v('context')) score += 20;
+            if (v('task')) score += 30;
+            if (v('constraints')) score += 15;
+            if (v('schema')) score += 15;
+
+            const bar = document.getElementById('scoreBar');
+            const label = document.getElementById('scoreLabel');
+            bar.style.width = score + '%';
+
+            let color, text;
+            if (score === 0) { color = 'bg-slate-600'; text = '— Add a task to begin'; }
+            else if (score < 50) { color = 'bg-red-500'; text = `${score}/100 · Sparse`; }
+            else if (score < 80) { color = 'bg-amber-400'; text = `${score}/100 · Good`; }
+            else if (score < 100) { color = 'bg-green-500'; text = `${score}/100 · Strong`; }
+            else { color = 'bg-emerald-400'; text = '100/100 · Perfect 🎯'; }
+
+            bar.className = 'h-full transition-all duration-500 rounded-full ' + color;
+            label.innerText = text;
+            label.className = 'font-bold ' + (score >= 80 ? 'text-green-400' : score >= 50 ? 'text-amber-300' : score > 0 ? 'text-red-300' : 'text-slate-400');
+        }
+
+        function buildPrompt() {
             let role = document.getElementById('role').value.trim();
             let context = document.getElementById('context').value.trim();
             let task = document.getElementById('task').value.trim();
             let constraints = document.getElementById('constraints').value.trim();
             const schema = document.getElementById('schema').value.trim();
 
-            if (!task) {
-                alert("Please provide at least a Task.");
-                return;
-            }
-
             extractedVariables.forEach(v => {
-                const val = document.getElementById(`var-${v}`).value || `[MISSING: ${v}]`;
+                const el = document.getElementById(`var-${v}`);
+                const val = (el && el.value) || `[MISSING: ${v}]`;
                 const regex = new RegExp(`\\{\\{${v}\\}\\}`, 'g');
                 role = role.replace(regex, val);
                 context = context.replace(regex, val);
@@ -249,18 +510,32 @@
             constraints = maskPII(constraints);
 
             let promptParts = [];
-
             if (role) promptParts.push(`<role>\n${role}\n</role>`);
             if (context) promptParts.push(`<context>\n${context}\n</context>`);
             promptParts.push(`<task>\n${task}\n</task>`);
             if (constraints) promptParts.push(`<constraints>\n${constraints}\n</constraints>`);
             if (schema) promptParts.push(`<json_schema>\n${schema}\n</json_schema>\n<instruction>\nYou must format your entire response exactly according to the provided json_schema. Do not include markdown formatting like \`\`\`json, just return the raw JSON object.\n</instruction>`);
 
-            const finalPrompt = promptParts.join('\n\n');
-            document.getElementById('output').value = finalPrompt;
-            
-            const tokenEstimate = Math.ceil(finalPrompt.length / 4);
-            document.getElementById('tokenCount').innerText = tokenEstimate.toLocaleString();
+            return promptParts.join('\n\n');
+        }
+
+        function generatePrompt() {
+            const task = document.getElementById('task').value.trim();
+            if (!task) {
+                toast('Please provide at least a Task.');
+                document.getElementById('task').focus();
+                return;
+            }
+
+            const finalPrompt = buildPrompt();
+            const out = document.getElementById('output');
+            out.value = finalPrompt;
+            out.classList.add('pop');
+            setTimeout(() => out.classList.remove('pop'), 400);
+
+            document.getElementById('tokenCount').innerText = Math.ceil(finalPrompt.length / 4).toLocaleString();
+            bumpStreak();
+            gtag('event', 'prompt_compiled');
         }
 
         function clearFields() {
@@ -270,28 +545,112 @@
             document.getElementById('variablesContainer').classList.add('hidden');
             document.getElementById('variablesGrid').innerHTML = '';
             extractedVariables.clear();
+            updateScore();
+            history.replaceState(null, '', location.pathname);
         }
 
         function copyToClipboard(event) {
             const output = document.getElementById('output');
-            if (!output.value) return;
-            
+            if (!output.value) { toast('Compile a prompt first.'); return; }
             output.select();
             document.execCommand('copy');
-            
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = 'Copied!';
-            btn.classList.add('bg-green-600', 'text-white');
-            btn.classList.remove('bg-slate-700');
-            
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.classList.remove('bg-green-600', 'text-white');
-                btn.classList.add('bg-slate-700');
-            }, 2000);
+            navigator.clipboard && navigator.clipboard.writeText(output.value).catch(() => {});
+            toast('✅ Copied to clipboard');
         }
+
+        /* --------------------------- Share links ---------------------------- */
+        function sharePrompt(event) {
+            const state = {};
+            FIELD_IDS.forEach(id => { const val = document.getElementById(id).value.trim(); if (val) state[id] = val; });
+            if (!state.task) { toast('Add a task before sharing.'); return; }
+
+            const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(state)))));
+            const url = `${location.origin}${location.pathname}#p=${encoded}`;
+            history.replaceState(null, '', `#p=${encoded}`);
+
+            if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+                navigator.share({ title: 'OmniPrompt', text: 'Check out this AI prompt', url }).catch(() => {});
+            } else {
+                (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject())
+                    .then(() => toast('🔗 Share link copied'))
+                    .catch(() => { prompt('Copy this share link:', url); });
+            }
+            gtag('event', 'prompt_shared');
+        }
+
+        function loadFromHash() {
+            if (!location.hash.startsWith('#p=')) return false;
+            try {
+                const encoded = location.hash.slice(3);
+                const state = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(encoded)))));
+                FIELD_IDS.forEach(id => { if (state[id]) document.getElementById(id).value = state[id]; });
+                onInput();
+                generatePrompt();
+                toast('📥 Loaded shared prompt');
+                return true;
+            } catch (e) { return false; }
+        }
+
+        /* --------------------------- Gamification --------------------------- */
+        function todayStr() { return new Date().toISOString().slice(0, 10); }
+
+        function renderStreak() {
+            const data = JSON.parse(localStorage.getItem('op_streak') || '{}');
+            const pill = document.getElementById('streakPill');
+            if (data.count > 0) {
+                document.getElementById('streakCount').innerText = data.count;
+                pill.classList.remove('hidden');
+                pill.classList.add('inline-flex');
+            }
+        }
+
+        function bumpStreak() {
+            const data = JSON.parse(localStorage.getItem('op_streak') || '{"last":null,"count":0,"best":0}');
+            const today = todayStr();
+            if (data.last === today) { renderStreak(); return; }
+
+            const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+            data.count = (data.last === yesterday) ? data.count + 1 : 1;
+            data.last = today;
+            data.best = Math.max(data.best || 0, data.count);
+            localStorage.setItem('op_streak', JSON.stringify(data));
+
+            const pill = document.getElementById('streakPill');
+            pill.classList.remove('hidden');
+            pill.classList.add('inline-flex', 'pop');
+            document.getElementById('streakCount').innerText = data.count;
+            setTimeout(() => pill.classList.remove('pop'), 400);
+            if (data.count > 1) toast(`🔥 ${data.count}-day streak! Keep it going.`);
+        }
+
+        /* ----------------------------- Toast -------------------------------- */
+        let toastTimer;
+        function toast(msg) {
+            const el = document.getElementById('toast');
+            el.innerText = msg;
+            el.classList.remove('hidden');
+            el.style.animation = 'none'; el.offsetHeight; el.style.animation = 'toastIn .25s ease-out';
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.add('hidden'), 2600);
+        }
+
+        /* ----------------------------- AdSense ------------------------------ */
+        function initAds() {
+            // Only push ads once a real publisher ID is wired in.
+            if (!window.ADSENSE_CLIENT || window.ADSENSE_CLIENT.includes('XXXX')) return;
+            document.querySelectorAll('ins.adsbygoogle').forEach(ins => {
+                ins.setAttribute('data-ad-client', window.ADSENSE_CLIENT);
+                try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+            });
+        }
+
+        /* ------------------------------ Init -------------------------------- */
+        renderTemplates();
+        renderStreak();
+        if (!loadFromHash()) updateScore();
+        initAds();
     </script>
+
     <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="velmorpub" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 </body>
 </html>
