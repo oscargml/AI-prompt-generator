@@ -7,6 +7,23 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+      // Consent Mode v2 — deny ad/analytics storage until the user accepts.
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500
+      });
+      // Re-apply a previously granted choice before config runs.
+      if (localStorage.getItem('op_consent') === 'granted') {
+        gtag('consent', 'update', {
+          ad_storage: 'granted',
+          ad_user_data: 'granted',
+          ad_personalization: 'granted',
+          analytics_storage: 'granted'
+        });
+      }
       gtag('config', 'G-MMPSM1H3E4');
     </script>
 
@@ -18,14 +35,14 @@
     <meta name="keywords" content="AI prompt generator, private prompt engineering, secure LLM prompts, open source prompt tool, stateless AI, prompt templates, ChatGPT, Claude, Gemini">
     <meta name="robots" content="index, follow">
     <meta name="author" content="OmniPrompt Open Source">
-    <link rel="canonical" href="https://oscargml.github.io/AI-prompt-generator/">
+    <link rel="canonical" href="https://omnipromptgenerator.xyz/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://oscargml.github.io/AI-prompt-generator/">
+    <meta property="og:url" content="https://omnipromptgenerator.xyz/">
     <meta property="og:title" content="OmniPrompt — Free Private AI Prompt Generator">
     <meta property="og:description" content="Build structured, PII-masked prompts for ChatGPT, Claude & Gemini. 100% client-side, zero logging, free forever.">
-    <meta property="og:image" content="https://oscargml.github.io/AI-prompt-generator/og-image.png">
+    <meta property="og:image" content="https://omnipromptgenerator.xyz/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
@@ -33,7 +50,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="OmniPrompt — Free Private AI Prompt Generator">
     <meta name="twitter:description" content="Build structured, PII-masked prompts for ChatGPT, Claude & Gemini. 100% client-side, zero logging, free forever.">
-    <meta name="twitter:image" content="https://oscargml.github.io/AI-prompt-generator/og-image.png">
+    <meta name="twitter:image" content="https://omnipromptgenerator.xyz/og-image.png">
 
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -68,7 +85,7 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "OmniPrompt",
-      "url": "https://oscargml.github.io/AI-prompt-generator/",
+      "url": "https://omnipromptgenerator.xyz/",
       "description": "A free, open-source, strictly client-side AI prompt generator that builds structured XML prompts for ChatGPT, Claude, and Gemini with automatic PII masking and zero data logging.",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any (web browser)",
@@ -309,10 +326,22 @@
 
     <footer class="text-center text-slate-500 text-sm pb-24">
         <p>&copy; 2026 OmniPrompt Open Source. Built for secure, local AI engineering.</p>
+        <p class="mt-2"><a href="privacy.html" class="hover:text-blue-600 underline">Privacy &amp; Cookie Policy</a> · <a href="#" onclick="openConsent(); return false;" class="hover:text-blue-600 underline">Cookie settings</a></p>
     </footer>
 
     <!-- Toast container -->
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-slate-900 text-white text-sm font-semibold py-2.5 px-5 rounded-full shadow-lg" style="animation: toastIn .25s ease-out;"></div>
+
+    <!-- Cookie consent banner (Consent Mode v2) -->
+    <div id="consentBanner" class="fixed bottom-0 inset-x-0 z-50 hidden">
+        <div class="max-w-4xl mx-auto m-4 bg-slate-900 text-slate-200 rounded-xl shadow-2xl border border-slate-700 p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+            <p class="text-sm flex-1">We use cookies for analytics and to show ads that keep OmniPrompt free. The prompt tool itself stays 100% private and client-side. See our <a href="privacy.html" class="underline text-blue-400 hover:text-blue-300">Privacy &amp; Cookie Policy</a>.</p>
+            <div class="flex gap-2 shrink-0">
+                <button onclick="setConsent(false)" class="text-sm font-semibold bg-slate-700 hover:bg-slate-600 text-white py-2 px-4 rounded-lg transition-colors">Reject</button>
+                <button onclick="setConsent(true)" class="text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg transition-colors">Accept</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         /* ----------------------------- Templates ----------------------------- */
@@ -634,7 +663,29 @@
             toastTimer = setTimeout(() => el.classList.add('hidden'), 2600);
         }
 
-        /* ----------------------------- AdSense ------------------------------ */
+        /* --------------------------- Consent / ads -------------------------- */
+        function setConsent(granted) {
+            localStorage.setItem('op_consent', granted ? 'granted' : 'denied');
+            const v = granted ? 'granted' : 'denied';
+            gtag('consent', 'update', {
+                ad_storage: v, ad_user_data: v, ad_personalization: v, analytics_storage: v
+            });
+            document.getElementById('consentBanner').classList.add('hidden');
+            if (granted) initAds();
+            gtag('event', 'consent_choice', { granted: granted });
+        }
+
+        function openConsent() {
+            const b = document.getElementById('consentBanner');
+            b.classList.remove('hidden');
+        }
+
+        function initConsent() {
+            const choice = localStorage.getItem('op_consent');
+            if (!choice) { document.getElementById('consentBanner').classList.remove('hidden'); }
+            else if (choice === 'granted') { initAds(); }
+        }
+
         function initAds() {
             // Only push ads once a real publisher ID is wired in.
             if (!window.ADSENSE_CLIENT || window.ADSENSE_CLIENT.includes('XXXX')) return;
@@ -648,7 +699,7 @@
         renderTemplates();
         renderStreak();
         if (!loadFromHash()) updateScore();
-        initAds();
+        initConsent();
     </script>
 
     <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="velmorpub" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
